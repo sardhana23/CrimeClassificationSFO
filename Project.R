@@ -1,13 +1,17 @@
-data <- read.csv("C:/Users/Biligiri Vasan/Desktop/Spring 2016/ML/train.csv",header = T,sep = ",")
+setpwd(.)
+data <- read.csv("Dataset/train.csv",header = T,sep = ",")
 df <- data.frame(data)
 data_table <- data.frame(table(df$Category))
-data_ordered <- data_table[order(data_table$Freq,decreasing = T),]
-data_ordered
 
-data_lon <- df$X
-
-print(df$X,digits = 20)
-
-data_add <- df$Address
-
-data_add
+############################
+#data_ordered <- data_table[order(data_table$Freq,decreasing = T),]
+#data_ordered
+#
+#data_lon <- df$X
+#
+#print(df$X,digits = 20)
+#
+#data_add <- df$Address
+#
+#data_add
+############################
