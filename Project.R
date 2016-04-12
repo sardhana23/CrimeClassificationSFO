@@ -15,3 +15,7 @@ data_table <- data.frame(table(df$Category))
 #
 #data_add
 ############################
+
+#Formatting Address column - Removing everything upto "Block of"
+
+data$Address <- mapply(gsub, "^.*?Block of ","", data["Address"])
