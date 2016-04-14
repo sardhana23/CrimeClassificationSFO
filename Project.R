@@ -1,4 +1,3 @@
-<<<<<<< .mine
 #read data
 library(randomForest)
 library(rpart)
@@ -6,16 +5,11 @@ library(mlbench)
 library(dplyr)
 library(ipred)
 library(maboost)
-data <- read.csv("C:/Users/Biligiri Vasan/Desktop/Spring 2016/ML/train.csv",colClasses=c("factor","factor","factor","factor","factor","factor"),header = T,sep = ",")
-||||||| .r4
-data <- read.csv("C:/Users/Biligiri Vasan/Desktop/Spring 2016/ML/train.csv",header = T,sep = ",")
-=======
-setpwd(.)
-data <- read.csv("Dataset/train.csv",header = T,sep = ",")
->>>>>>> .r6
+library(class)
+data <- read.csv("C:/Users/Biligiri Vasan/Desktop/Spring 2016/ML/train.csv",header = T,sep = ",",na.strings = c("?"))
+data <- na.omit(data)
 df <- data.frame(data)
-<<<<<<< .mine
-datatrain <- data[,c(-1,-3,-4,-5,-6,-7)]
+datatrain <- data[]
 classtrain <- data[2]
 a <- as.vector(datatrain)
 b <- as.vector(classtrain)
@@ -25,55 +19,38 @@ str(a)
 #classtrain[,1]
 #head(datatrain[,])
 #initial analysis
-#data_table <- data.frame(table(df$Category))
-#data_ordered <- data_table[order(data_table$Freq,decreasing = T),]
-#data_ordered
-||||||| .r4
 data_table <- data.frame(table(df$Category))
 data_ordered <- data_table[order(data_table$Freq,decreasing = T),]
-data_ordered
-=======
-data_table <- data.frame(table(df$Category))
->>>>>>> .r6
-
-<<<<<<< .mine
+#data_ordered
+data_table
 #data_frame <- select(df,df$Dates,df$DayOfWeek,df$PdDistrict,df$Address,df$X,df$Y)
 #data_frame <- df %>% select(df,df$Dates,df$DayOfWeek,df$PdDistrict,df$Address,df$X,df$Y)
-||||||| .r4
-data_lon <- df$X
-=======
-############################
-#data_ordered <- data_table[order(data_table$Freq,decreasing = T),]
-#data_ordered
-#
-#data_lon <- df$X
-#
-#print(df$X,digits = 20)
-#
-#data_add <- df$Address
-#
-#data_add
-############################
->>>>>>> .r6
 
-<<<<<<< .mine
 #data.rf <- randomForest(as.formula(names(datatrain[1]),"~.",datatrain,classtrain))
-||||||| .r4
-print(df$X,digits = 20)
-=======
-#Formatting Address column - Removing everything upto "Block of"
->>>>>>> .r6
 
-<<<<<<< .mine
 #data.bagging <- bagging(df[,c(-2,-3,-6)], df$Category, mfinal=15,
  #                       control=rpart.control(maxdepth=5, minsplit=15))
 
 data.boosting <- maboost(as.formula(paste(names(datatrain[1]),"~.")),datatrain,iter = 10)
 #df$Dates + df$DayOfWeek + df$PdDistrict + df$Address + df$X + df$Y
 
-||||||| .r4
-data_add <- df$Address
 
-data_add=======
-data$Address <- mapply(gsub, "^.*?Block of ","", data["Address"])
->>>>>>> .r6
+iris
+train <- rbind(iris3[1:25,,1], iris3[1:25,,2], iris3[1:25,,3])
+test <- rbind(iris3[26:50,,1], iris3[26:50,,2], iris3[26:50,,3])
+cl <- factor(c(rep("s",25), rep("c",25), rep("v",25)))
+knn(train, test, cl, k = 3, prob=TRUE)
+attributes(.Last.value)
+train
+test
+cl
+
+index <- sample(1:nrow(data),round(0.5*nrow(data)))
+train <- data[index,]
+test <- data[-index,]
+train_labels <- train[,2]
+test_labels <- test[,2]
+class_attr <- names(data[2])
+col_names <- names(data[,-2])
+knn_model <- knn(train[,-2],test[,-2],train_labels,k=9,prob=T,use.all = FALSE)
+train
