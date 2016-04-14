@@ -7,5 +7,5 @@ thetimes = chron(dates=dtparts[,1],times=dtparts[,2],format=c('y-m-d','h:m:s'))
 
 data$Year <- format(thetimes, format="%y")
 data$Month <- format(thetimes, format="%m")
-data$Day <- format(thetimes, format="%d")
+data$Date <- format(thetimes, format="%d")
 data$hour <- format(thetimes, format="%H")
