@@ -80,30 +80,12 @@ attributes(.Last.value)
 #col_names <- names(data[,-2])
 #knn_model <- knn(train[,-2],test[,-2],train_labels,k=9,prob=T,use.all = FALSE)
 #
+data_new$Year <- as.factor(data_new$Year)
+data_new$Month <- as.factor(data_new$Month)
+data_new$Date <- as.factor(data_new$Date)
+data_new$hour <- as.factor(data_new$hour)
 
+data_new$Category <- factor(data_new$Category)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-train
+form <- as.formula("Category ~ DayOfWeek+PdDistrict+X+Y+Year+Month+Date+hour")
+RF_model <- randomForest(form,data=data_new, importance=TRUE)
