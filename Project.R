@@ -52,5 +52,5 @@ bag_model <- bagging(form, training_data_set, mfinal = 100)
 
 
 form <- as.formula("Category ~ DayOfWeek+PdDistrict+X+Y+Year+Month+Date+hour")
-RF_model <- randomForest(form,data=data_new, importance=TRUE)
+RF_model <- randomForest(form,data=training_data_set, importance=TRUE)
 
