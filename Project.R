@@ -44,8 +44,8 @@ data_new$hour <- as.factor(data_new$hour)
 data_formatted <- data_new[,c("Category","DayOfWeek","PdDistrict","Address","X","Y","Year","Month","Date","hour")]
 
 sample_data<-sample(1:nrow(data_formatted),size = 0.8*nrow(data_formatted))
-training_data_set<-data[sample_data,]
-test_data_set<-data[-sample_data,]
+training_data_set<-data_formatted[sample_data,]
+test_data_set<-data_formatted[-sample_data,]
 
 form <- as.formula("Category ~ DayOfWeek+PdDistrict+X+Y+Year+Month+Date+hour")
 bag_model <- bagging(form, training_data_set, mfinal = 100)
