@@ -10,6 +10,7 @@ install.packages('maboost')
 install.packages('class')
 install.packages('chron')
 install.packages('adabag')
+install.packages('e1071')
 
 library('randomForest')
 library('rpart')
@@ -20,6 +21,7 @@ library('maboost')
 library('class')
 library('chron')
 library('adabag')
+library('e1071')
 
 #Read Data
 data <- read.csv("Dataset/train.csv",header = T,sep = ",")
@@ -64,3 +66,32 @@ bag_model <- bagging(form, training_data_set, mfinal = 100)
 form <- as.formula("Category ~ DayOfWeek+PdDistrict+X+Y+Year+Month+Date+hour")
 RF_model <- randomForest(form,data=training_data_set, importance=TRUE)
 
+data <- data_new[c("DayOfWeek","PdDistrict","X","Y","Year","Month","Date","hour","Category")]
+data[,1:2]<- sapply(data[,1:2],as.numeric)
+data$Category <- factor(data$Category)
+cluster_data <- data[3:4]
+cl <- kmeans(cluster_data, centers=10000)
+#data$PdDistrict <- NULL
+data$X <- NULL
+data$Y <- NULL
+
+data <- cbind(data,clusternum=cl$cluster)
+reorder_data <- data[,c(1,2,3,4,5,7,6)]
+str(reorder_data)
+
+#from now on use only reorder data to do modeling and analysis
+#boosting
+sample_data <- createDataPartition(reorder_data$Category, p = .8,list = FALSE,times = 1)
+training_data_set<-reorder_data[sample_data,]
+test_data_set<-reorder_data[-sample_data,]
+train_Class_data<-training_data_set[,7]
+test_Class_data<-test_data_set[,7]
+class_attr <- names(reorder_data[7])
+col_names <- names(reorder_data[,-7])
+
+RF_model <- randomForest(as.formula(paste(names(training_data_set[7]),sep="","~.")),data=training_data_set, importance=TRUE)
+
+boosting_model <- maboost(as.formula(paste(names(training_data_set[7]),sep="","~.")),data=training_data_set,iter =5 , type="discrete")
+
+naive_model <- naiveBayes(as.formula(paste(names(training_data_set[7]),sep="","~.")),data=training_data_set)
+naive_result <- predict(naive_model, test_data_set)
