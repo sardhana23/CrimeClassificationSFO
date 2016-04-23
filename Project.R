@@ -1,15 +1,25 @@
 train
 =======
 #read data
-library(randomForest)
-library(rpart)
-library(mlbench)
-library(dplyr)
-library(ipred)
-library(maboost)
-library(class)
+install.packages('randomForest')
+install.packages('rpart')
+install.packages('mlbench')
+install.packages('dplyr')
+install.packages('ipred')
+install.packages('maboost')
+install.packages('class')
+install.packages('chron')
+install.packages('adabag')
+
+library('randomForest')
+library('rpart')
+library('mlbench')
+library('dplyr')
+library('ipred')
+library('maboost')
+library('class')
 library('chron')
-library(adabag)
+library('adabag')
 
 #Read Data
 data <- read.csv("Dataset/train.csv",header = T,sep = ",")
