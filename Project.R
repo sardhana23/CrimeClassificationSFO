@@ -53,19 +53,6 @@ data_new$Month <- as.factor(data_new$Month)
 data_new$Date <- as.factor(data_new$Date)
 data_new$hour <- as.factor(data_new$hour)
 
-data_formatted <- data_new[,c("Category","DayOfWeek","PdDistrict","Address","X","Y","Year","Month","Date","hour")]
-
-sample_data<-sample(1:nrow(data_formatted),size = 0.8*nrow(data_formatted))
-training_data_set<-data_formatted[sample_data,]
-test_data_set<-data_formatted[-sample_data,]
-
-form <- as.formula("Category ~ DayOfWeek+PdDistrict+X+Y+Year+Month+Date+hour")
-bag_model <- bagging(form, training_data_set, mfinal = 100)
-
-
-form <- as.formula("Category ~ DayOfWeek+PdDistrict+X+Y+Year+Month+Date+hour")
-RF_model <- randomForest(form,data=training_data_set, importance=TRUE)
-
 data <- data_new[c("DayOfWeek","PdDistrict","X","Y","Year","Month","Date","hour","Category")]
 data[,1:2]<- sapply(data[,1:2],as.numeric)
 data$Category <- factor(data$Category)
@@ -76,8 +63,7 @@ data$X <- NULL
 data$Y <- NULL
 
 data <- cbind(data,clusternum=cl$cluster)
-reorder_data <- data[,c(1,2,3,4,5,7,6)]
-str(reorder_data)
+reorder_data <- data[,c(1,2,3,4,5,6,8,7)]
 
 #from now on use only reorder data to do modeling and analysis
 #boosting
