@@ -1,7 +1,7 @@
 #clustering and attach back the cluster number to data frame
 #take 'data' data frame already created from the previous script
-data[,1:2]<- sapply(data[,1:2],as.numeric)
 data <- data_new[c("DayOfWeek","PdDistrict","X","Y","Year","Month","Date","hour","Category")]
+data[,1:2]<- sapply(data[,1:2],as.numeric)
 data$Category <- factor(data$Category)
 cluster_data <- data[2:4]
 cl <- kmeans(cluster_data, centers=10000)
