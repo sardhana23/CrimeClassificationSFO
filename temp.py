@@ -21,14 +21,13 @@ from sklearn.cluster import KMeans
 from sklearn.naive_bayes import MultinomialNB,BernoulliNB,GaussianNB
 import gzip
 import zipfile
-from sklearn.ensemble import GradientBoostingClassifier
 
 def loadData(df,scaler=None):
     data = pd.DataFrame(index=range(len(df)))
-
-    data = df.get(['X','Y']) #2
-
     #data = data.join(pd.get_dummies(df['DayOfWeek'])) #7
+
+    data = df.get(['X','Y'])    
+    
     DayOfWeeks = df.DayOfWeek.unique()
     DayOfWeekMap = {}
     i = 0
@@ -63,6 +62,11 @@ def loadData(df,scaler=None):
 
     data['StreetCorner'] = df['Address'].str.contains('/').map(int)
     data['Block'] = df['Address'].str.contains('Block').map(int)
+    
+    data['cluster_ids'] = df['cluster_ids']
+    
+    data = data.drop('X',1)
+    data = data.drop('Y',1)
 
     X = data.values
     Y = None
@@ -165,7 +169,13 @@ def RFpredict(X,Y,Xhat):
     #clf.set_params(criterion='entropy')
     clf.set_params(min_samples_split=1000)
     clf.fit(X,Y)
-    Yhat = clf.predict_proba(Xhat)
+    Yhat = clf.predict(Xhat)
+    return Yhat,clf
+    
+def AdaBoostpredict(X,Y,Xhat):
+    clf = AdaBoostClassifier(n_estimators=50)
+    clf.fit(X,Y)
+    Yhat = clf.predict(Xhat)
     return Yhat,clf
     
 def NB(X,Y):
@@ -194,7 +204,7 @@ def NB(X,Y):
 def NBpredict(X,Y,Xhat):
     clf = GaussianNB()
     clf.fit(X,Y)
-    Yhat = clf.predict_proba(Xhat)
+    Yhat = clf.predict(Xhat)
     return Yhat,clf
 
 train_arr = []
@@ -202,13 +212,15 @@ test_arr = []
 yhat_arr = []
 
 train = pd.read_csv("Dataset/train.csv")
+train = train[train.Y < 38]
+
 df = pd.DataFrame(train)
 df['category_count']  = df.groupby('Category')['Category'].transform('count')
 df2 = df[df['category_count'].between(4280,174901)]
 data_filtered = df2.drop('category_count',1)
 
 test = pd.read_csv("Dataset/test.csv")
-
+'''
 data1 = pd.DataFrame(data_filtered.get(['X','Y']))
 data1len = len(data1)
 data2 = pd.DataFrame(test.get(['X','Y']))
@@ -229,18 +241,28 @@ test=test.drop('Y',1)
 
 data_filtered['cluster_ids']=est.labels_[0:data1len]
 test['cluster_ids']=est.labels_[data1len:data1len+data2len]
+'''
+
+data = pd.DataFrame(data_filtered.get(['X','Y']))
+print("before custering")
+est = KMeans(n_clusters=1000, max_iter=100)
+est.fit(data)
+print("after custering")
+
+data_filtered['cluster_ids']=est.labels_
 
 X,Y,scaler = loadData(data_filtered)
-AdaBoost(X,Y)
 
-#clf = RF(X,Y)
-#clf = AdaBoost(X,Y)
-#clf = NB(X,Y)
+clf = RF(X,Y)
+clf = AdaBoost(X,Y)
+clf = NB(X,Y)
 
+data2 = pd.DataFrame(test.get(['X','Y']))
 
-#Xhat,_,__ = loadData(test,scaler)
-#Yhat,clf = RFpredict(X,Y,Xhat)
-#Yhat,clf = NBpredict(X,Y,Xhat)
+Xhat,_,__ = loadData(test,scaler)
+Yhat1,clf1 = RFpredict(X,Y,Xhat)
+Yhat2,clf2 = AdaBoostpredict(X,Y,Xhat)
+Yhat3,clf3 = NBpredict(X,Y,Xhat)
 
 #submission = pd.DataFrame(Yhat,columns=clf.classes_)
 #submission['Id'] = test.Id.tolist()
