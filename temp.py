@@ -17,9 +17,11 @@ from sklearn import linear_model
 import csv
 from sklearn import metrics
 from sklearn import preprocessing
+from sklearn.cluster import KMeans
 from sklearn.naive_bayes import MultinomialNB,BernoulliNB,GaussianNB
 import gzip
 import zipfile
+from sklearn.ensemble import GradientBoostingClassifier
 
 def loadData(df,scaler=None):
     data = pd.DataFrame(index=range(len(df)))
@@ -113,8 +115,10 @@ def RF(X,Y):
     return clf
 
 def AdaBoost(X,Y):
-    print("AdaBoost")
-    clf = AdaBoostClassifier(n_estimators=5)
+    print("Ada")
+    clf = AdaBoostClassifier(n_estimators=50)
+    
+    
     #cross validation
     #n_estimators = [20]
     #clf.set_params(n_estimators=500) #10
@@ -163,7 +167,7 @@ def RFpredict(X,Y,Xhat):
     clf.fit(X,Y)
     Yhat = clf.predict_proba(Xhat)
     return Yhat,clf
-
+    
 def NB(X,Y):
     print("NB")
     clf = GaussianNB()
@@ -197,25 +201,43 @@ train_arr = []
 test_arr = []
 yhat_arr = []
 
-train = pd.read_csv("D:/ML_Project/train.csv")
+train = pd.read_csv("Dataset/train.csv")
 df = pd.DataFrame(train)
 df['category_count']  = df.groupby('Category')['Category'].transform('count')
 df2 = df[df['category_count'].between(4280,174901)]
 data_filtered = df2.drop('category_count',1)
 
-data = data_filtered.get(['X','Y'])
+test = pd.read_csv("Dataset/test.csv")
+
+data1 = pd.DataFrame(data_filtered.get(['X','Y']))
+data1len = len(data1)
+data2 = pd.DataFrame(test.get(['X','Y']))
+data2len = len(data2)
+
+data = data1.append(data2, ignore_index=True)
+
+
 est = KMeans(n_clusters=1000, max_iter=100)
+est.fit(data)
+
+
 
 data_filtered=data_filtered.drop('X',1)
 data_filtered=data_filtered.drop('Y',1)
-data_filtered['cluster_ids']=est.labels_
+test=test.drop('X',1)
+test=test.drop('Y',1)
+
+data_filtered['cluster_ids']=est.labels_[0:data1len]
+test['cluster_ids']=est.labels_[data1len:data1len+data2len]
 
 X,Y,scaler = loadData(data_filtered)
-clf = RF(X,Y)
+AdaBoost(X,Y)
+
+#clf = RF(X,Y)
 #clf = AdaBoost(X,Y)
 #clf = NB(X,Y)
 
-#test = pd.read_csv("D:/ML_Project/test.csv")
+
 #Xhat,_,__ = loadData(test,scaler)
 #Yhat,clf = RFpredict(X,Y,Xhat)
 #Yhat,clf = NBpredict(X,Y,Xhat)
