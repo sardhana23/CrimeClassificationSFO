@@ -202,6 +202,14 @@ df = pd.DataFrame(train)
 df['category_count']  = df.groupby('Category')['Category'].transform('count')
 df2 = df[df['category_count'].between(4280,174901)]
 data_filtered = df2.drop('category_count',1)
+
+data = data_filtered.get(['X','Y'])
+est = KMeans(n_clusters=1000, max_iter=100)
+
+data_filtered=data_filtered.drop('X',1)
+data_filtered=data_filtered.drop('Y',1)
+data_filtered['cluster_ids']=est.labels_
+
 X,Y,scaler = loadData(data_filtered)
 clf = RF(X,Y)
 #clf = AdaBoost(X,Y)
