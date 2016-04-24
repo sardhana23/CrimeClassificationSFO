@@ -249,6 +249,9 @@ est = KMeans(n_clusters=1000, max_iter=100)
 est.fit(data)
 print("after custering")
 
+cluster_centers = est.cluster_centers_
+cluster_labels = est.labels_
+
 data_filtered['cluster_ids']=est.labels_
 
 X,Y,scaler = loadData(data_filtered)
