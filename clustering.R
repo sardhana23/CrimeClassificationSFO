@@ -22,3 +22,4 @@ test_Class_data<-test_data_set[,7]
 class_attr <- names(reorder_data[7])
 col_names <- names(reorder_data[,-7])
 boosting_model <- maboost(as.formula(paste(names(training_data_set[7]),sep="","~.")),data=training_data_set,iter =5 , type="discrete")
+svm_model <- svm(as.formula(paste(names(training_data_set[7]),sep="","~.")),data=training_data_set)

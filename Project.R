@@ -1,5 +1,5 @@
 train
-=======
+
 #read data
 install.packages('randomForest')
 install.packages('rpart')
@@ -53,6 +53,7 @@ data_new$Month <- as.factor(data_new$Month)
 data_new$Date <- as.factor(data_new$Date)
 data_new$hour <- as.factor(data_new$hour)
 
+#clustering only on X and Y
 data <- data_new[c("DayOfWeek","PdDistrict","X","Y","Year","Month","Date","hour","Category")]
 data[,1:2]<- sapply(data[,1:2],as.numeric)
 data$Category <- factor(data$Category)
