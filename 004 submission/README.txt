@@ -19,6 +19,6 @@ Dataset location:
 Steps to run the code:
 ----------------------
 
-1. Extract the code.zip to home directory
+1. Extract the submission.zip to home directory
 2. Open the CrimeClassification.py file and update the training dataset location and testing dataset location to the variables "trainLocation" and "testLocation" respectively.
-3. Run the code using Anaconda python using an IPython console.
+3. Run the code using Anaconda python using an IPython console. This distribution of Python can be downloaded from : https://www.continuum.io/downloads
