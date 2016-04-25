@@ -1,0 +1,21 @@
+San Francisco Crime Classification
+CS 6375 – Machine Learning
+
+Asha Mary Thomas - axt143530
+Biligiri Vasan S R - bxs152830
+Somasundaram Ardhanareeswaran - sxa146230
+
+Dataset loading and initial filtering : Biligiri and Asha
+Removal of unnecessary categories : Asha
+Clustering : Somasundaram 
+Data Massaging : Asha, Biligiri, Somasundaram
+Random Forest model and Cross Validation : Somasundaram
+AdaBoost model and Cross Validation : Asha
+Naive Bayes model and Cross Validation : Biligiri
+Random Forest prediction on test data: Somasundaram
+AdaBoost prediction on test data: Asha
+Naive Bayes prediction on test data: Biligiri
+Visualization of clustering results, algorithm results, and prediction results : Asha, Biligiri, Somasundaram
+Report compilation : Asha, Biligiri, Somasundaram
+
+
