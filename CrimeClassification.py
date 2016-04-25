@@ -21,6 +21,9 @@ from sklearn.cluster import KMeans
 
 from matplotlib import pyplot
 
+trainLocation = "C:/train.csv"
+testLocation = "C:/test.csv"
+
 
 #Load and Format the data attributes
 def dataMassaging(dataFrame):
@@ -75,7 +78,7 @@ def locationPlot(locations):
     return
 
 #Read Data    
-train = pd.read_csv("C:/train.csv")
+train = pd.read_csv(trainLocation)
 
 #Filter outliers
 train = train[train.Y < 38]
@@ -180,7 +183,7 @@ accuracies['NB'] = totalScore
 logLosses['NB'] = totalLogLoss
 
 #predict category on testData
-test = pd.read_csv("C:/test.csv")
+test = pd.read_csv(testLocation)
 
 #predict clusters for test data
 data2 = test.get(['X','Y'])
