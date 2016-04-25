@@ -53,7 +53,13 @@ def dataMassaging(dataFrame):
     data = data.drop('X',1)
     data = data.drop('Y',1)    
     features = data.values
-    classes = dataFrame.Category.values    
+    
+    
+    if 'Category' in dataFrame.columns:
+        classes = dataFrame.Category.values    
+    else:
+        classes = None
+        
     return features, classes
 
 #Bar chart plot for Category of crime    
@@ -103,12 +109,15 @@ features, classes = dataMassaging(data_filtered)
 
 #####Classifiers to get Accuracy and Log loss functions#####
 
+accuracies = {}
+logLosses = {}
+
 #RF Cross validation
 print("RF Cross validation")
 classifier = RandomForestClassifier()
 totalScore = 0
 totalLogLoss = 0
-kfold = cross_validation.KFold(len(features),shuffle=True,n_folds=9)
+kfold = cross_validation.KFold(len(features),shuffle=True,n_folds=10)
 for train, test in kfold:
     classifier.set_params(min_samples_split=1000)
     classifier.fit(features,classes)
@@ -123,15 +132,16 @@ totalScore = totalScore/10.0
 totalLogLoss = totalLogLoss/10.0
 print("Average Accuracy : ", totalScore)
 print("Average Log Loss : ", totalLogLoss)
+accuracies['RF'] = totalScore
+logLosses['RF'] = totalLogLoss
 
 #AdaBoost Cross Validation
 print("Ada Cross validation")
 classifier = AdaBoostClassifier(n_estimators=50)
 totalScore = 0
 totalLogLoss = 0
-kfold = cross_validation.KFold(len(features),shuffle=True,n_folds=9)
+kfold = cross_validation.KFold(len(features),shuffle=True,n_folds=10)
 for train, test in kfold:
-    classifier.set_params(min_samples_split=1000)
     classifier.fit(features,classes)
     predictions = classifier.predict_proba(features[test])
     score = classifier.score(features[test], classes[test])
@@ -144,15 +154,16 @@ totalScore = totalScore/10.0
 totalLogLoss = totalLogLoss/10.0
 print("Average Accuracy : ", totalScore)
 print("Average Log Loss : ", totalLogLoss)
+accuracies['Ada'] = totalScore
+logLosses['Ada'] = totalLogLoss
 
 #NB Cross Validation
 print("NB Cross validation")
 classifier = GaussianNB()
 totalScore = 0
 totalLogLoss = 0
-kfold = cross_validation.KFold(len(features),shuffle=True,n_folds=9)
+kfold = cross_validation.KFold(len(features),shuffle=True,n_folds=10)
 for train, test in kfold:
-    classifier.set_params(min_samples_split=1000)
     classifier.fit(features,classes)
     predictions = classifier.predict_proba(features[test])
     score = classifier.score(features[test], classes[test])
@@ -165,6 +176,8 @@ totalScore = totalScore/10.0
 totalLogLoss = totalLogLoss/10.0
 print("Average Accuracy : ", totalScore)
 print("Average Log Loss : ", totalLogLoss)
+accuracies['NB'] = totalScore
+logLosses['NB'] = totalLogLoss
 
 #predict category on testData
 test = pd.read_csv("C:/test.csv")
@@ -183,7 +196,7 @@ classifier1.fit(features, classes)
 predictions1 = classifier1.predict(test_features)
 visualizePrediction(predictions1)
 
-#AdaBoost predict
+#AdaBoost predictx
 classifier2 = AdaBoostClassifier(n_estimators=50)
 classifier2.fit(features, classes)
 predictions2 = classifier2.predict(test_features)
